@@ -1,0 +1,112 @@
+{
+	"info": {
+		"_postman_id": "de1def81-e4a2-46a9-8c7f-e2824d71a005",
+		"name": "server-lord-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32199884"
+	},
+	"item": [
+		{
+			"name": "new_task",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const userIdList = [\"6763f3c62e856adf2f3e543b\", \"67505c812f4eacb3cd05dff9\"];",
+							"const numberOfTasks = 5;",
+							"const taskInterval = 10;",
+							"",
+							"// Get the current user index or start at 0",
+							"let userIndex = pm.environment.get(\"userIndex\") || 0;",
+							"",
+							"// Get the global unique task index or start at 1",
+							"let uniqueTaskIndex = pm.environment.get(\"uniqueTaskIndex\") || 1;",
+							"",
+							"// Check if we have more users to process",
+							"if (userIndex < userIdList.length) {",
+							"    const userId = userIdList[userIndex];",
+							"",
+							"    // Calculate the task number for the current user",
+							"    const taskNumberForUser = (uniqueTaskIndex - 1) % numberOfTasks + 1;",
+							"",
+							"    if (taskNumberForUser <= numberOfTasks) {",
+							"        // Construct the pingURL",
+							"        const pingURL = `http://localhost:3000/tasks/${uniqueTaskIndex}/heartbeat`;",
+							"",
+							"        // Set environment variables for the current task",
+							"        pm.environment.set(\"userId\", userId);",
+							"        pm.environment.set(\"taskName\", `Task ${uniqueTaskIndex}`);",
+							"        pm.environment.set(\"interval\", taskInterval);",
+							"        pm.environment.set(\"pingURL\", pingURL); // Set the pingURL",
+							"",
+							"        // Print the pingURL to the console for debugging",
+							"        console.log(\"pingURL:\", pingURL); // This will print in Postman Console",
+							"",
+							"        // Increment the unique task index",
+							"        pm.environment.set(\"uniqueTaskIndex\", +uniqueTaskIndex + 1);",
+							"",
+							"        // If we've completed the tasks for this user, move to the next user",
+							"        if (taskNumberForUser === numberOfTasks) {",
+							"            pm.environment.set(\"userIndex\", +userIndex + 1);",
+							"        }",
+							"",
+							"        // Rerun the same request",
+							"        pm.execution.setNextRequest(pm.info.requestName);",
+							"    }",
+							"} else {",
+							"    // All users processed, clean up environment variables",
+							"    pm.environment.unset(\"userIndex\");",
+							"    pm.environment.unset(\"uniqueTaskIndex\");",
+							"    console.log(\"All tasks have been created for all users!\");",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"if (pm.environment.get(\"taskIndex\")) {",
+							"    pm.execution.setNextRequest(pm.info.requestName); // Re-run the same request",
+							"} else {",
+							"    console.log(\"All tasks have been created!\");",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userId\": \"{{userId}}\",\n    \"pingURL\": \"{{pingURL}}\",\n    \"name\": \"{{taskName}}\",\n    \"interval\": \"{{interval}}\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/tasks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
