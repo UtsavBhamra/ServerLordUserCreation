@@ -1,5 +1,11 @@
 # Task Generation 
 
+### Execution Flow:
+
+1) collectionRunner.js
+2) generate_tasks.js
+3) taskrunner.js
+
 ### Setup Guide
 
 1) Make sure you have mongo db and postman installed on your system

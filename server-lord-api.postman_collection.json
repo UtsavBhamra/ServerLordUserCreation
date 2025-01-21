@@ -22,6 +22,7 @@
 							"",
 							"// Get the global unique task index or start at 1",
 							"let uniqueTaskIndex = pm.environment.get(\"uniqueTaskIndex\") || 1;",
+							"let taskNumber = uniqueTaskIndex;",
 							"",
 							"// Check if we have more users to process",
 							"if (userIndex < userIdList.length) {",
@@ -39,10 +40,10 @@
 							"        pm.environment.set(\"taskName\", `Task ${uniqueTaskIndex}`);",
 							"        pm.environment.set(\"interval\", taskInterval);",
 							"        pm.environment.set(\"pingURL\", pingURL); // Set the pingURL",
+							"        pm.environment.set(\"taskNumber\",taskNumber);",
 							"",
 							"        // Print the pingURL to the console for debugging",
 							"        console.log(\"pingURL:\", pingURL); // This will print in Postman Console",
-							"",
 							"        // Increment the unique task index",
 							"        pm.environment.set(\"uniqueTaskIndex\", +uniqueTaskIndex + 1);",
 							"",
@@ -59,8 +60,7 @@
 							"    pm.environment.unset(\"userIndex\");",
 							"    pm.environment.unset(\"uniqueTaskIndex\");",
 							"    console.log(\"All tasks have been created for all users!\");",
-							"}",
-							""
+							"}"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -87,7 +87,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"userId\": \"{{userId}}\",\n    \"pingURL\": \"{{pingURL}}\",\n    \"name\": \"{{taskName}}\",\n    \"interval\": \"{{interval}}\"\n}\n",
+					"raw": "{\n    \"userId\": \"{{userId}}\",\n    \"pingURL\": \"{{pingURL}}\",\n    \"name\": \"{{taskName}}\",\n    \"interval\": \"{{interval}}\",\n    \"taskNumber\": \"{{taskNumber}}\"\n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
