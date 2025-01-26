@@ -17,6 +17,8 @@ if (!fs.existsSync(outputDir)) {
 const generateJsContent = (url) => `
 import fetch from "node-fetch";
 
+const interval = 10000;
+
 async function sendHeartbeat() {
     try {
         const response = await fetch('${url}', {
@@ -38,7 +40,8 @@ async function sendHeartbeat() {
     }
 }
 
-sendHeartbeat();
+setInterval(sendHeartbeat, interval);
+sendHeartbeat(); // Initial call to send the first heartbeat immediately
 `;
 
 // Generating task for each url

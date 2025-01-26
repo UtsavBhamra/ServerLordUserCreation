@@ -31,9 +31,9 @@ fs.readdir(dirPath, (err, files) => {
         });
 
         // Kill process after 10 secs if it is still running to avoid wastage of resources
-        setTimeout(()=>{
-            process.kill();
-            console.log(`[${file}] process killed due to time out`);
-        },10000); 
+        // setTimeout(()=>{
+        //     process.kill();
+        //     console.log(`[${file}] process killed due to time out`);
+        // },10000); 
     });
 });
